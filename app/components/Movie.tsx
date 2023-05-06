@@ -28,7 +28,7 @@ export default function Movie({ movie }: MovieProps) {
         setInBookmarks(true);
       }
     }
-  }, []);
+  }, [bookmarked, movie.imdbID, setBookmarked]);
 
   const bookmarkMovie = () => {
     setBookmarked((previous: MovieType[]) => {
