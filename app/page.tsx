@@ -38,7 +38,7 @@ const Home = () => {
       <Stack>
         <Navigation setCurrentPage={setCurrentPage} />
         {currentPage === 1 && <MoviesList movies={movies} />}
-        {currentPage === 2 && <Bookmarked bookmarked={bookmarked} />}
+        {currentPage === 2 && <Bookmarked />}
       </Stack>
     </Stack>
   );
