@@ -4,4 +4,5 @@ export interface MovieType {
   Type: string;
   Year: string;
   imdbID: string;
+  watched: boolean;
 }

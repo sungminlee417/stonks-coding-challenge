@@ -18,7 +18,7 @@ export default function MoviesList({ movies }: MoviesList) {
           ))}
         </Wrap>
       ) : (
-        <Text>Please search a movie...</Text>
+        <Text>No movies searched...</Text>
       )}
     </Flex>
   );

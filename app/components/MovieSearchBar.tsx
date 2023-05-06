@@ -15,9 +15,13 @@ import { MovieType } from "../types";
 
 interface MovieSearchBar {
   setMovies: (movies: MovieType[]) => void;
+  setCurrentPage: (num: number) => void;
 }
 
-export default function MovieSearchBar({ setMovies }: MovieSearchBar) {
+export default function MovieSearchBar({
+  setMovies,
+  setCurrentPage,
+}: MovieSearchBar) {
   const [searchInput, setSearchInput] = useState("");
 
   const searchMovies = async () => {
@@ -39,6 +43,7 @@ export default function MovieSearchBar({ setMovies }: MovieSearchBar) {
     try {
       const response = await axios.request(options);
       setMovies(response.data.Search);
+      setCurrentPage(1);
     } catch (error) {
       console.error(error);
     }

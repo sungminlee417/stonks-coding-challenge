@@ -5,23 +5,40 @@ import MovieSearchBar from "./components/MovieSearchBar";
 import Navigation from "./components/Navigation";
 import Bookmarked from "./components/Bookmarked";
 import MoviesList from "./components/MoviesList";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MovieType } from "./types";
+import { BookmarksContext } from "./context/BookmarksProvider";
 
 const Home = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [movies, setMovies] = useState<MovieType[]>([]);
+  const { bookmarked, setBookmarked } = useContext(BookmarksContext);
+
+  useEffect(() => {
+    const bookmarkedMovies = localStorage.getItem("bookmarkedMovies");
+
+    try {
+      if (bookmarkedMovies) {
+        setBookmarked(JSON.parse(bookmarkedMovies));
+      } else {
+        localStorage.setItem("bookmarkedMovies", JSON.stringify([]));
+      }
+    } catch (error) {
+      console.error("Failed to parse bookmarked movies:", error);
+      localStorage.removeItem("bookmarkedMovies");
+    }
+  }, []);
 
   return (
     <Stack spacing={20}>
       <Flex justify="space-between">
         <HomeHeaders />
-        <MovieSearchBar setMovies={setMovies} />
+        <MovieSearchBar setMovies={setMovies} setCurrentPage={setCurrentPage} />
       </Flex>
       <Stack>
         <Navigation setCurrentPage={setCurrentPage} />
         {currentPage === 1 && <MoviesList movies={movies} />}
-        {currentPage === 2 && <Bookmarked />}
+        {currentPage === 2 && <Bookmarked bookmarked={bookmarked} />}
       </Stack>
     </Stack>
   );
