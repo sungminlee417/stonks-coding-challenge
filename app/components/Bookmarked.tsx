@@ -38,7 +38,6 @@ export default function Bookmarked() {
     <Flex p={10}>
       {bookmarked.length ? (
         <Stack spacing="50px">
-          <Heading size={"md"}>Select queued to mark as watched</Heading>
           <Wrap spacing={10} justify={"center"}>
             {bookmarked.map((bookmark: MovieType) => (
               <WrapItem key={bookmark.imdbID}>
