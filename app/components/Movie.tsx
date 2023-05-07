@@ -70,11 +70,11 @@ export default function Movie({ movie }: MovieProps) {
 
   return (
     <Box>
-      <Stack spacing={2} w="310px">
+      <Stack spacing={2} w={{ lg: "310px" }}>
         <Image
           src={movie.Poster}
           alt={movie.Title}
-          h={"450px"}
+          h={"400px"}
           objectFit={"cover"}
         />
         <Flex justify={"space-between"} gap={2}>

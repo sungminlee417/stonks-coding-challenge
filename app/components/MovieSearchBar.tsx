@@ -50,7 +50,7 @@ export default function MovieSearchBar({
   };
 
   return (
-    <Flex align={"end"} direction={"column"} gap={2}>
+    <Flex align={{ md: "end", sm: "start" }} direction={"column"} gap={2}>
       <Tooltip
         hasArrow
         label="Search movies"
@@ -58,7 +58,7 @@ export default function MovieSearchBar({
         color="black"
         placement="bottom-start"
       >
-        <InputGroup mt={10} mr={10} w={300} h={"fit-content"}>
+        <InputGroup h={"fit-content"} w={"fit-content"}>
           <InputLeftElement>
             <FontAwesomeIcon icon={faSearch} />
           </InputLeftElement>
@@ -70,7 +70,7 @@ export default function MovieSearchBar({
         </InputGroup>
       </Tooltip>
       <Button
-        mr={10}
+        w={"fit-content"}
         colorScheme="teal"
         variant="solid"
         style={{ backgroundColor: "teal" }}

@@ -5,10 +5,6 @@ import Movie from "./Movie";
 import { Button } from "@chakra-ui/button";
 import { BookmarksContext } from "../context/BookmarksProvider";
 
-interface BookmarkedProps {
-  bookmarked: MovieType[];
-}
-
 export default function Bookmarked() {
   const { bookmarked, setBookmarked } = useContext(BookmarksContext);
 
@@ -44,7 +40,7 @@ export default function Bookmarked() {
         <Stack spacing="50px">
           <Heading size={"md"}>Select queued to mark as watched</Heading>
           <Wrap spacing={10} justify={"center"}>
-            {bookmarked.reverse().map((bookmark: MovieType) => (
+            {bookmarked.map((bookmark: MovieType) => (
               <WrapItem key={bookmark.imdbID}>
                 <Flex direction={"column"} alignContent={"flex-start"} gap={2}>
                   <Movie movie={bookmark} />

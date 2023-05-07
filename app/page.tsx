@@ -30,13 +30,18 @@ const Home = () => {
   }, []);
 
   return (
-    <Stack spacing={20}>
-      <Flex justify="space-between">
+    <Stack spacing={{ lg: 20, base: 10 }}>
+      <Flex
+        justify="space-between"
+        direction={["column", "column", "row"]}
+        p={8}
+        gap={10}
+      >
         <HomeHeaders />
         <MovieSearchBar setMovies={setMovies} setCurrentPage={setCurrentPage} />
       </Flex>
       <Stack>
-        <Navigation setCurrentPage={setCurrentPage} />
+        <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
         {currentPage === 1 && <MoviesList movies={movies} />}
         {currentPage === 2 && <Bookmarked />}
       </Stack>
