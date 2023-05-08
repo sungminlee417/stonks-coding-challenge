@@ -6,13 +6,13 @@ import Navigation from "./components/Navigation";
 import Bookmarked from "./components/Bookmarked";
 import MoviesList from "./components/MoviesList";
 import { useContext, useEffect, useState } from "react";
-import { MovieType } from "./types";
 import { BookmarksContext } from "./context/BookmarksProvider";
+import { MoviesContext } from "./context/MoviesProvider";
 
 const Home = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [movies, setMovies] = useState<MovieType[]>([]);
-  const { bookmarked, setBookmarked } = useContext(BookmarksContext);
+  const { setBookmarked } = useContext(BookmarksContext);
+  const { movies, setMovies } = useContext(MoviesContext);
 
   useEffect(() => {
     const bookmarkedMovies = localStorage.getItem("bookmarkedMovies");
@@ -38,11 +38,11 @@ const Home = () => {
         gap={10}
       >
         <HomeHeaders />
-        <MovieSearchBar setMovies={setMovies} setCurrentPage={setCurrentPage} />
+        <MovieSearchBar setCurrentPage={setCurrentPage} />
       </Flex>
       <Stack>
         <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
-        {currentPage === 1 && <MoviesList movies={movies} />}
+        {currentPage === 1 && <MoviesList />}
         {currentPage === 2 && <Bookmarked />}
       </Stack>
     </Stack>

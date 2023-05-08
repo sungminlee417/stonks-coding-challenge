@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   Tooltip,
   Input,
@@ -11,17 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { MovieType } from "../types";
+import { MoviesContext } from "../context/MoviesProvider";
 
 interface MovieSearchBar {
-  setMovies: (movies: MovieType[]) => void;
   setCurrentPage: (num: number) => void;
 }
 
-export default function MovieSearchBar({
-  setMovies,
-  setCurrentPage,
-}: MovieSearchBar) {
+export default function MovieSearchBar({ setCurrentPage }: MovieSearchBar) {
+  const { setMovies } = useContext(MoviesContext);
+
   const [searchInput, setSearchInput] = useState("");
 
   const searchMovies = async () => {
@@ -32,7 +30,7 @@ export default function MovieSearchBar({
         s: searchInput,
         r: "json",
         y: "",
-        page: "1",
+        page: 1,
       },
       headers: {
         "X-RapidAPI-Key": process.env.API_KEY,

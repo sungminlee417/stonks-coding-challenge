@@ -70,7 +70,7 @@ export default function Movie({ movie }: MovieProps) {
 
   return (
     <Box>
-      <Stack spacing={2} w={{ lg: "310px" }}>
+      <Stack spacing={2} w={{ lg: "300px" }}>
         <Image
           src={movie.Poster}
           alt={movie.Title}

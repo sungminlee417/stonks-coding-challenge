@@ -1,12 +1,46 @@
-import { useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { MovieType } from "../types";
-import { Flex, Wrap, WrapItem, Text, Heading, Stack } from "@chakra-ui/layout";
+import { Stack, Flex, SimpleGrid, GridItem, Text } from "@chakra-ui/layout";
 import Movie from "./Movie";
 import { Button } from "@chakra-ui/button";
 import { BookmarksContext } from "../context/BookmarksProvider";
+import { Select } from "@chakra-ui/react";
 
 export default function Bookmarked() {
   const { bookmarked, setBookmarked } = useContext(BookmarksContext);
+  const [orderedBookmarked, setOrderedBookmarked] = useState(bookmarked);
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    switch (e.target.value) {
+      case "Default":
+        setOrderedBookmarked(bookmarked);
+        break;
+      case "Alphabetical":
+        setOrderedBookmarked((bookmarks) => {
+          return [...bookmarks].sort((a: MovieType, b: MovieType) =>
+            a.Title.localeCompare(b.Title)
+          );
+        });
+        break;
+      case "Watched":
+        setOrderedBookmarked((bookmarks) => {
+          return [...bookmarks].sort((a: MovieType, b: MovieType) =>
+            a.watched && !b.watched ? -1 : !a.watched && b.watched ? 1 : 0
+          );
+        });
+        break;
+      case "Unwatched":
+        setOrderedBookmarked((bookmarks) => {
+          return [...bookmarks].sort((a: MovieType, b: MovieType) =>
+            a.watched && !b.watched ? 1 : !a.watched && b.watched ? -1 : 0
+          );
+        });
+        break;
+      default:
+        setOrderedBookmarked(bookmarked);
+        break;
+    }
+  };
 
   const toggleBookmarkWatched = (bookmark: MovieType) => {
     setBookmarked((previous: MovieType[]) => {
@@ -35,31 +69,37 @@ export default function Bookmarked() {
   };
 
   return (
-    <Flex p={10}>
-      {bookmarked.length ? (
-        <Stack spacing="50px">
-          <Wrap spacing={10} justify={"center"}>
-            {bookmarked.map((bookmark: MovieType) => (
-              <WrapItem key={bookmark.imdbID}>
-                <Flex direction={"column"} alignContent={"flex-start"} gap={2}>
-                  <Movie movie={bookmark} />
-                  <Button
-                    className={`${
-                      bookmark.watched
-                        ? "bg-[teal] text-white"
-                        : "bg-white text-[teal] border-[teal] border"
-                    }`}
-                    _hover={{ opacity: "80%" }}
-                    _active={{ opacity: "50%" }}
-                    onClick={() => toggleBookmarkWatched(bookmark)}
-                  >
-                    {bookmark.watched ? "Watched" : "Queued"}
-                  </Button>
-                </Flex>
-              </WrapItem>
-            ))}
-          </Wrap>
-        </Stack>
+    <Flex p={10} direction={"column"} align={"center"} gap={10}>
+      <Stack>
+        <Select variant="flushed" placeholder="" onChange={handleSelectChange}>
+          <option value="Default">Default</option>
+          <option value="Alphabetical">Alphabetical</option>
+          <option value="Watched">Watched</option>
+          <option value="Unwatched">Unwatched</option>
+        </Select>
+      </Stack>
+      {orderedBookmarked.length ? (
+        <SimpleGrid gap={10} columns={{ xl: 4, lg: 2, base: 1 }}>
+          {orderedBookmarked.map((bookmark: MovieType) => (
+            <GridItem key={bookmark.imdbID}>
+              <Flex direction={"column"} alignContent={"flex-start"} gap={2}>
+                <Movie movie={bookmark} />
+                <Button
+                  className={`${
+                    bookmark.watched
+                      ? "bg-[teal] text-white"
+                      : "bg-white text-[teal] border-[teal] border"
+                  }`}
+                  _hover={{ opacity: "80%" }}
+                  _active={{ opacity: "50%" }}
+                  onClick={() => toggleBookmarkWatched(bookmark)}
+                >
+                  {bookmark.watched ? "Watched" : "Queued"}
+                </Button>
+              </Flex>
+            </GridItem>
+          ))}
+        </SimpleGrid>
       ) : (
         <Text>No bookmarked movies...</Text>
       )}

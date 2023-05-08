@@ -1,24 +1,22 @@
-import { Flex, Wrap, Text, WrapItem } from "@chakra-ui/react";
+import { Flex, Text, SimpleGrid, GridItem } from "@chakra-ui/react";
 import Movie from "./Movie";
-import { MovieType } from "../types";
+import { useContext } from "react";
+import { MoviesContext } from "../context/MoviesProvider";
 
-interface MoviesList {
-  movies: MovieType[];
-}
-
-export default function MoviesList({ movies }: MoviesList) {
+export default function MoviesList() {
+  const { movies } = useContext(MoviesContext);
   return (
-    <Flex p={10}>
+    <Flex p={10} direction={"column"} align={"center"} gap={10}>
       {movies.length ? (
-        <Wrap spacing={10} justify={"center"}>
+        <SimpleGrid gap={10} columns={{ xl: 4, lg: 2, base: 1 }}>
           {movies.map((movie) => (
-            <WrapItem key={movie.imdbID}>
+            <GridItem key={movie.imdbID}>
               <Movie movie={movie} />
-            </WrapItem>
+            </GridItem>
           ))}
-        </Wrap>
+        </SimpleGrid>
       ) : (
-        <Text>No movies searched...</Text>
+        <Text alignSelf={"start"}>No movies searched...</Text>
       )}
     </Flex>
   );
