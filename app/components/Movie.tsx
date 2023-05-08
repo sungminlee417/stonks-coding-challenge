@@ -1,18 +1,18 @@
+import { useContext, useEffect, useState } from "react";
 import {
-  Flex,
   Box,
   Button,
-  Image,
+  Flex,
   Heading,
+  Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { MovieType } from "../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState } from "react";
 import { BookmarksContext } from "../context/BookmarksProvider";
+import { MovieType } from "../types";
 
 interface MovieProps {
   movie: MovieType;
@@ -26,68 +26,53 @@ export default function Movie({ movie, setOrderedBookmarks }: MovieProps) {
   const [inBookmarks, setInBookmarks] = useState(false);
 
   useEffect(() => {
-    for (let bookmark of bookmarked) {
-      if (bookmark.imdbID === movie.imdbID) {
-        setInBookmarks(true);
-      }
-    }
-  }, [bookmarked, movie.imdbID, setInBookmarks]);
+    setInBookmarks(
+      bookmarked.some((bookmark) => bookmark.imdbID === movie.imdbID)
+    );
+  }, [bookmarked, movie.imdbID]);
 
-  const bookmarkMovie = () => {
-    setBookmarked((previous: MovieType[]) => {
-      const newState = [...previous];
-      newState.push({ ...movie, watched: false });
-      return newState;
-    });
-    const bookmarkedMovies = localStorage.getItem("bookmarkedMovies");
-    if (bookmarkedMovies) {
-      const parsed = JSON.parse(bookmarkedMovies);
-      parsed.push({ ...movie, watched: false });
-      localStorage.setItem("bookmarkedMovies", JSON.stringify(parsed));
+  const handleBookmarkToggle = () => {
+    const bookmarkedMovies = [...bookmarked];
+    const movieIndex = bookmarkedMovies.findIndex(
+      (bookmark) => bookmark.imdbID === movie.imdbID
+    );
+    if (movieIndex >= 0) {
+      bookmarkedMovies.splice(movieIndex, 1);
     } else {
-      localStorage.setItem(
-        "bookmarkedMovies",
-        JSON.stringify([{ ...movie, watched: false }])
-      );
+      bookmarkedMovies.push({ ...movie, watched: false });
     }
-  };
-
-  const unbookmarkMovie = () => {
+    setBookmarked((previous: MovieType[]) => bookmarkedMovies);
     if (setOrderedBookmarks) {
       setOrderedBookmarks((movies: MovieType[]) => {
-        const newState = movies.filter(
-          (bookmark) => bookmark.imdbID !== movie.imdbID
-        );
-        return newState;
+        if (movieIndex >= 0) {
+          return movies.filter((bookmark) => bookmark.imdbID !== movie.imdbID);
+        }
+        return [...movies, { ...movie, watched: false }];
       });
-    }
-    setBookmarked((previous: MovieType[]) => {
-      const newState = previous.filter(
-        (bookmark) => bookmark.imdbID !== movie.imdbID
-      );
-      return newState;
-    });
-    const bookmarkedMovies = localStorage.getItem("bookmarkedMovies");
-    if (bookmarkedMovies) {
-      const parsed = JSON.parse(bookmarkedMovies);
-      const removed = parsed.filter(
-        (bookmark: MovieType) => bookmark.imdbID !== movie.imdbID
-      );
-      localStorage.setItem("bookmarkedMovies", JSON.stringify(removed));
-    } else {
-      localStorage.setItem("bookmarkedMovies", JSON.stringify([]));
     }
   };
 
   return (
     <Box>
       <Stack spacing={2} w={{ lg: "300px" }}>
-        <Image
-          src={movie.Poster}
-          alt={movie.Title}
-          h={"400px"}
-          objectFit={"cover"}
-        />
+        {movie.Poster === "N/A" ? (
+          <Flex
+            justify="center"
+            align="center"
+            h="400px"
+            bg="gray.200"
+            color="gray.500"
+          >
+            <Text>No Image Available</Text>
+          </Flex>
+        ) : (
+          <Image
+            src={movie.Poster}
+            alt={movie.Title}
+            h={"400px"}
+            objectFit={"cover"}
+          />
+        )}
         <Flex justify={"space-between"} gap={2}>
           <Box>
             <Heading size="sm">{movie.Title}</Heading>
@@ -95,7 +80,7 @@ export default function Movie({ movie, setOrderedBookmarks }: MovieProps) {
           </Box>
           <Button
             className="border border-[teal]"
-            onClick={inBookmarks ? unbookmarkMovie : bookmarkMovie}
+            onClick={handleBookmarkToggle}
           >
             <FontAwesomeIcon
               icon={inBookmarks ? faSolidHeart : faRegularHeart}

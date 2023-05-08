@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useCallback, useEffect } from "react";
 import { MovieType } from "../types";
 
 type BookmarksContextProps = {
@@ -10,17 +10,34 @@ type BookmarksProviderProps = {
   children: React.ReactNode;
 };
 
-export const BookmarksContext = createContext<BookmarksContextProps>({
+const defaultContextValue: BookmarksContextProps = {
   bookmarked: [],
   setBookmarked: () => {},
-});
+};
 
-export const BookmarksProvider = ({ children }: BookmarksProviderProps) => {
+export const BookmarksContext =
+  createContext<BookmarksContextProps>(defaultContextValue);
+
+export const BookmarksProvider: React.FC<BookmarksProviderProps> = ({
+  children,
+}) => {
   const [bookmarked, setBookmarked] = useState<MovieType[]>([]);
+
+  const setBookmarkedCallback = useCallback(
+    (previous: (previous: MovieType[]) => MovieType[]) => {
+      setBookmarked(previous);
+      localStorage.setItem("bookmarkedMovies", JSON.stringify(previous));
+    },
+    []
+  );
+
+  useEffect(() => {
+    localStorage.setItem("bookmarkedMovies", JSON.stringify(bookmarked));
+  }, [bookmarked]);
 
   const contextValue: BookmarksContextProps = {
     bookmarked,
-    setBookmarked,
+    setBookmarked: setBookmarkedCallback,
   };
 
   return (

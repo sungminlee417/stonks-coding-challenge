@@ -16,19 +16,26 @@ export default function Navigation({
       pb={{ lg: 10, base: 4 }}
       borderBottom={"1px"}
       borderBottomColor={"gray"}
+      align="center"
     >
       <Link
         onClick={() => setCurrentPage(1)}
-        className={`${currentPage === 1 ? "text-[teal]" : "text-black"}`}
+        className={`${
+          currentPage === 1 ? "text-[teal]" : "text-gray-500 hover:text-[teal]"
+        }`}
+        _hover={{ textDecoration: "none" }}
       >
-        Searched Movies
+        <span>Search Results</span>
       </Link>
       <Divider orientation="vertical" height={"auto"} />
       <Link
         onClick={() => setCurrentPage(2)}
-        className={`${currentPage === 2 ? "text-[teal]" : "text-black"}`}
+        className={`${
+          currentPage === 2 ? "text-[teal]" : "text-gray-500 hover:text-[teal]"
+        }`}
+        _hover={{ textDecoration: "none" }}
       >
-        Bookmarked Movies
+        <span>Bookmarked Movies</span>
       </Link>
     </Flex>
   );

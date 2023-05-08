@@ -1,4 +1,3 @@
-"use client";
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import {
@@ -8,21 +7,32 @@ import {
   InputLeftElement,
   Button,
   Flex,
+  Text,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { MoviesContext } from "../context/MoviesProvider";
+import { motion } from "framer-motion";
 
 interface MovieSearchBar {
   setCurrentPage: (num: number) => void;
+  setSearched: (bool: boolean) => void;
 }
 
-export default function MovieSearchBar({ setCurrentPage }: MovieSearchBar) {
+export default function MovieSearchBar({
+  setCurrentPage,
+  setSearched,
+}: MovieSearchBar) {
   const { setMovies } = useContext(MoviesContext);
 
   const [searchInput, setSearchInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const searchMovies = async () => {
+    setIsLoading(true);
+    setIsError(false);
+
     const options = {
       method: "GET",
       url: "https://movie-database-alternative.p.rapidapi.com/",
@@ -45,42 +55,63 @@ export default function MovieSearchBar({ setCurrentPage }: MovieSearchBar) {
         setCurrentPage(1);
       } else {
         setMovies([]);
-        alert(`No movies with the name, "${searchInput}" found.`);
+        setSearched(true);
       }
     } catch (error) {
-      console.error(error);
+      setIsError(true);
+    }
+
+    setIsLoading(false);
+    setCurrentPage(1);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && searchInput.trim().length > 0) {
+      searchMovies();
     }
   };
 
   return (
     <Flex align={{ md: "end", sm: "start" }} direction={"column"} gap={2}>
-      <Tooltip
-        hasArrow
-        label="Search movies"
-        bg="gray.300"
-        color="black"
-        placement="bottom-start"
+      <motion.div
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
         <InputGroup h={"fit-content"} w={"fit-content"}>
           <InputLeftElement>
             <FontAwesomeIcon icon={faSearch} />
           </InputLeftElement>
           <Input
-            placeholder="Search"
+            placeholder="Search for movies"
             onChange={(e) => setSearchInput(e.target.value)}
+            onKeyPress={handleKeyPress}
             value={searchInput}
+            isInvalid={isError}
           />
         </InputGroup>
-      </Tooltip>
-      <Button
-        w={"fit-content"}
-        colorScheme="teal"
-        variant="solid"
-        style={{ backgroundColor: "teal" }}
-        onClick={searchMovies}
+      </motion.div>
+      {isError && (
+        <Text color="red.500">
+          Oops! Something went wrong. Please try again.
+        </Text>
+      )}
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
-        Search
-      </Button>
+        <Button
+          w={"fit-content"}
+          colorScheme="teal"
+          variant="solid"
+          style={{ backgroundColor: "teal" }}
+          onClick={searchMovies}
+          disabled={searchInput.trim().length === 0 || isLoading}
+        >
+          {isLoading ? "Searching..." : "Search"}
+        </Button>
+      </motion.div>
     </Flex>
   );
 }

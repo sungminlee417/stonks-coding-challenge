@@ -15,13 +15,10 @@ export const MoviesContext = createContext<MoviesContextProps>({
   setMovies: () => {},
 });
 
-export const MoviesProvider = ({ children }: MoviesProviderProps) => {
+export const MoviesProvider: React.FC<MoviesProviderProps> = ({ children }) => {
   const [movies, setMovies] = useState<MovieType[]>([]);
 
-  const contextValue: MoviesContextProps = {
-    movies,
-    setMovies,
-  };
+  const contextValue = { movies, setMovies };
 
   return (
     <MoviesContext.Provider value={contextValue}>

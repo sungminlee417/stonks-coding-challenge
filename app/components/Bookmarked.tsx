@@ -9,9 +9,12 @@ import { Select } from "@chakra-ui/react";
 export default function Bookmarked() {
   const { bookmarked, setBookmarked } = useContext(BookmarksContext);
   const [orderedBookmarks, setOrderedBookmarks] = useState(bookmarked);
+  const [selectedOption, setSelectedOption] = useState("Default");
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    switch (e.target.value) {
+    const selectedValue = e.target.value;
+    setSelectedOption(selectedValue);
+    switch (selectedValue) {
       case "Alphabetical":
         setOrderedBookmarks((bookmarks) => {
           return [...bookmarks].sort((a: MovieType, b: MovieType) =>
@@ -40,37 +43,29 @@ export default function Bookmarked() {
   };
 
   const toggleBookmarkWatched = (bookmark: MovieType) => {
-    setBookmarked((previous: MovieType[]) => {
-      const newState = [...previous];
+    const newBookmarks = [...bookmarked];
+    const updatedBookmark = newBookmarks.find(
+      (bm) => bm.imdbID === bookmark.imdbID
+    );
 
-      for (let i = 0; i < newState.length; i++) {
-        if (newState[i].imdbID === bookmark.imdbID)
-          newState[i].watched = !newState[i].watched;
-      }
-
-      return newState;
-    });
-
-    const bookmarkedMovies = localStorage.getItem("bookmarkedMovies");
-    if (bookmarkedMovies) {
-      const parsed = JSON.parse(bookmarkedMovies);
-      for (let i = 0; i < parsed.length; i++) {
-        if (parsed[i].imdbID === bookmark.imdbID)
-          parsed[i].watched = !parsed[i].watched;
-      }
-
-      localStorage.setItem("bookmarkedMovies", JSON.stringify(parsed));
-    } else {
-      localStorage.setItem("bookmarkedMovies", JSON.stringify([]));
+    if (updatedBookmark) {
+      updatedBookmark.watched = !updatedBookmark.watched;
+      setBookmarked((previous: MovieType[]) => newBookmarks);
+      localStorage.setItem("bookmarkedMovies", JSON.stringify(newBookmarks));
     }
   };
 
   return (
     <Flex p={10} direction={"column"} align={"center"} gap={10}>
       <Stack>
-        <Select variant="flushed" placeholder="" onChange={handleSelectChange}>
-          <option value="Default">Default</option>
-          <option value="Alphabetical">Alphabetical</option>
+        <Select
+          variant="flushed"
+          placeholder=""
+          value={selectedOption}
+          onChange={handleSelectChange}
+        >
+          <option value="Default">Sort By</option>
+          <option value="Alphabetical">Title A-Z</option>
           <option value="Watched">Watched</option>
           <option value="Unwatched">Unwatched</option>
         </Select>
@@ -94,14 +89,14 @@ export default function Bookmarked() {
                   _active={{ opacity: "50%" }}
                   onClick={() => toggleBookmarkWatched(bookmark)}
                 >
-                  {bookmark.watched ? "Watched" : "Queued"}
+                  {bookmark.watched ? "Watched" : "Unwatched"}
                 </Button>
               </Flex>
             </GridItem>
           ))}
         </SimpleGrid>
       ) : (
-        <Text>No bookmarked movies...</Text>
+        <Text>No bookmarks added yet!</Text>
       )}
     </Flex>
   );

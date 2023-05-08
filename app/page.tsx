@@ -11,8 +11,8 @@ import { MoviesContext } from "./context/MoviesProvider";
 
 const Home = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searched, setSearched] = useState(false);
   const { setBookmarked } = useContext(BookmarksContext);
-  const { movies, setMovies } = useContext(MoviesContext);
 
   useEffect(() => {
     const bookmarkedMovies = localStorage.getItem("bookmarkedMovies");
@@ -38,11 +38,14 @@ const Home = () => {
         gap={10}
       >
         <HomeHeaders />
-        <MovieSearchBar setCurrentPage={setCurrentPage} />
+        <MovieSearchBar
+          setCurrentPage={setCurrentPage}
+          setSearched={setSearched}
+        />
       </Flex>
       <Stack>
         <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
-        {currentPage === 1 && <MoviesList />}
+        {currentPage === 1 && <MoviesList searched={searched} />}
         {currentPage === 2 && <Bookmarked />}
       </Stack>
     </Stack>
