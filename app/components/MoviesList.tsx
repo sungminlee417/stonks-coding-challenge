@@ -31,17 +31,11 @@ export default function MoviesList({ searched }: MoviesListProps) {
               ? "Oops! No movies found."
               : "Welcome! Let's search for some movies."}
           </Text>
-          {searched && (
-            <Text mt={2}>
-              We couldn't find any movies matching your search. Please try
-              again!
-            </Text>
-          )}
-          {!searched && (
-            <Text mt={2}>
-              Start by entering a movie title in the search bar above.
-            </Text>
-          )}
+          <Text mt={2}>
+            {searched
+              ? "We couldn't find any movies matching your search. Please try again!"
+              : "Start by entering a movie title in the search bar above."}
+          </Text>
         </Flex>
       )}
     </Flex>
