@@ -16,9 +16,12 @@ import { BookmarksContext } from "../context/BookmarksProvider";
 
 interface MovieProps {
   movie: MovieType;
+  setOrderedBookmarks?: (
+    callback: (movies: MovieType[]) => MovieType[]
+  ) => void;
 }
 
-export default function Movie({ movie }: MovieProps) {
+export default function Movie({ movie, setOrderedBookmarks }: MovieProps) {
   const { bookmarked, setBookmarked } = useContext(BookmarksContext);
   const [inBookmarks, setInBookmarks] = useState(false);
 
@@ -50,6 +53,14 @@ export default function Movie({ movie }: MovieProps) {
   };
 
   const unbookmarkMovie = () => {
+    if (setOrderedBookmarks) {
+      setOrderedBookmarks((movies: MovieType[]) => {
+        const newState = movies.filter(
+          (bookmark) => bookmark.imdbID !== movie.imdbID
+        );
+        return newState;
+      });
+    }
     setBookmarked((previous: MovieType[]) => {
       const newState = previous.filter(
         (bookmark) => bookmark.imdbID !== movie.imdbID

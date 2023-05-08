@@ -8,36 +8,33 @@ import { Select } from "@chakra-ui/react";
 
 export default function Bookmarked() {
   const { bookmarked, setBookmarked } = useContext(BookmarksContext);
-  const [orderedBookmarked, setOrderedBookmarked] = useState(bookmarked);
+  const [orderedBookmarks, setOrderedBookmarks] = useState(bookmarked);
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     switch (e.target.value) {
-      case "Default":
-        setOrderedBookmarked(bookmarked);
-        break;
       case "Alphabetical":
-        setOrderedBookmarked((bookmarks) => {
+        setOrderedBookmarks((bookmarks) => {
           return [...bookmarks].sort((a: MovieType, b: MovieType) =>
             a.Title.localeCompare(b.Title)
           );
         });
         break;
       case "Watched":
-        setOrderedBookmarked((bookmarks) => {
+        setOrderedBookmarks((bookmarks) => {
           return [...bookmarks].sort((a: MovieType, b: MovieType) =>
             a.watched && !b.watched ? -1 : !a.watched && b.watched ? 1 : 0
           );
         });
         break;
       case "Unwatched":
-        setOrderedBookmarked((bookmarks) => {
+        setOrderedBookmarks((bookmarks) => {
           return [...bookmarks].sort((a: MovieType, b: MovieType) =>
             a.watched && !b.watched ? 1 : !a.watched && b.watched ? -1 : 0
           );
         });
         break;
       default:
-        setOrderedBookmarked(bookmarked);
+        setOrderedBookmarks(bookmarked);
         break;
     }
   };
@@ -78,12 +75,15 @@ export default function Bookmarked() {
           <option value="Unwatched">Unwatched</option>
         </Select>
       </Stack>
-      {orderedBookmarked.length ? (
+      {orderedBookmarks.length ? (
         <SimpleGrid gap={10} columns={{ xl: 4, lg: 2, base: 1 }}>
-          {orderedBookmarked.map((bookmark: MovieType) => (
+          {orderedBookmarks.map((bookmark: MovieType) => (
             <GridItem key={bookmark.imdbID}>
-              <Flex direction={"column"} alignContent={"flex-start"} gap={2}>
-                <Movie movie={bookmark} />
+              <Flex direction={"column"} align={"space-between"} gap={2}>
+                <Movie
+                  movie={bookmark}
+                  setOrderedBookmarks={setOrderedBookmarks}
+                />
                 <Button
                   className={`${
                     bookmark.watched

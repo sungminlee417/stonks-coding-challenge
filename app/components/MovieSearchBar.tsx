@@ -40,8 +40,13 @@ export default function MovieSearchBar({ setCurrentPage }: MovieSearchBar) {
 
     try {
       const response = await axios.request(options);
-      setMovies(response.data.Search);
-      setCurrentPage(1);
+      if (response.data.Search) {
+        setMovies(response.data.Search);
+        setCurrentPage(1);
+      } else {
+        setMovies([]);
+        alert(`No movies with the name, "${searchInput}" found.`);
+      }
     } catch (error) {
       console.error(error);
     }
