@@ -1,5 +1,7 @@
 # ReelReminder
 
+[Live Link](https://stonks-coding-challenge-gfxhk92c7-sungminlee417.vercel.app/)
+
 ReelReminder is a web application that allows users to search for and bookmark their favorite movies. Users can search for movies by title, and view information such as the movie's title, year of release, and poster image. Users can also bookmark movies they are interested in, and view their bookmarked movies on a separate component.
 
 ## Features
