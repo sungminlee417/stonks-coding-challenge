@@ -1,35 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ReelReminder
 
-## Getting Started
+ReelReminder is a web application that allows users to search for and bookmark their favorite movies. Users can search for movies by title, and view information such as the movie's title, year of release, and poster image. Users can also bookmark movies they are interested in, and view their bookmarked movies on a separate component.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Search for movies by title
+- View movie information such as title, year of release, and poster image
+- Bookmark movies
+- View bookmarked movies on a separate component
+- Mark movies as "watched"
+- Sort bookmarked movies
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- React.js
+- Next.js
+- Chakra UI
+- Rapid API
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Installation
 
-## Learn More
+- Clone the repository
+- Run `npm install` to install dependencies
+- Create a .env file and add your Rapid API key as API_KEY=your_api_key
+- Run npm run dev to start the development server
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# stonks-coding-challenge
+- Navigate to the home page at http://localhost:3000
+- Enter a movie title in the search bar and press Enter or click the Search button
+- Click the Bookmark button on a movie to bookmark the movie
+- Navigate to the Bookmarks component by clicking "Bookmarked Movies" to view your bookmarked movies
