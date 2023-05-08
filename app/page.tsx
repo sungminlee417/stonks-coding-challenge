@@ -27,7 +27,7 @@ const Home = () => {
       console.error("Failed to parse bookmarked movies:", error);
       localStorage.removeItem("bookmarkedMovies");
     }
-  }, []);
+  }, [setBookmarked]);
 
   return (
     <Stack spacing={{ lg: 20, base: 10 }}>
