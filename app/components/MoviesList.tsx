@@ -13,7 +13,7 @@ export default function MoviesList({ searched }: MoviesListProps) {
   return (
     <Flex p={10} direction={"column"} align={"center"} gap={10} bg={"white"}>
       {movies.length ? (
-        <SimpleGrid columns={{ xl: 4, lg: 2, base: 1 }} spacing={10}>
+        <SimpleGrid columns={{ xl: 4, lg: 3, sm: 2, base: 1 }} spacing={10}>
           {movies.map((movie) => (
             <GridItem key={movie.imdbID}>
               <Movie movie={movie} />

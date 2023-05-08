@@ -7,7 +7,7 @@ import Bookmarked from "./components/Bookmarked";
 import MoviesList from "./components/MoviesList";
 import { useContext, useEffect, useState } from "react";
 import { BookmarksContext } from "./context/BookmarksProvider";
-import { MoviesContext } from "./context/MoviesProvider";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -44,9 +44,18 @@ const Home = () => {
         />
       </Flex>
       <Stack>
-        <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
-        {currentPage === 1 && <MoviesList searched={searched} />}
-        {currentPage === 2 && <Bookmarked />}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Navigation
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+          {currentPage === 1 && <MoviesList searched={searched} />}
+          {currentPage === 2 && <Bookmarked />}
+        </motion.div>
       </Stack>
     </Stack>
   );

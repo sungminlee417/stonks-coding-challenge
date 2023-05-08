@@ -54,7 +54,7 @@ export default function Movie({ movie, setOrderedBookmarks }: MovieProps) {
 
   return (
     <Box>
-      <Stack spacing={2} w={{ lg: "300px" }}>
+      <Stack spacing={2} w={{ lg: "300px", base: "215px" }}>
         {movie.Poster === "N/A" ? (
           <Flex
             justify="center"
